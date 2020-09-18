@@ -28,19 +28,25 @@ with open(roster,"r") as rosterfile:
 outfile = roster.split('.')
 outfile[0] = outfile[0]+"_out"
 outfile = ".".join(outfile)
-with open(outfile,"w") as rosterfile:
+with open(outfile,"w") as outputfile:
+	writer = csv.writer(outputfile)
 	ifFirstRow = 1
 	for person in rosterdata:
+		
 		if ifFirstRow == 1:
 			ifFirstRow = 0
 			person.append(response)
 		else:
-			for row in range(1,row_count):
-				if counter[row-1] < maxsize: #if we havent accounted for all the potential people in the team. ie if a max team size is 6 if 6 people havent been ticked off
-					rowdata = "|".join(data[row])
-					if person[col] in rowdata:
-						person.append(1)
-						counter[row-1] = counter[row-1]+1
-						break
-		writer = csv.writer(rosterfile)
+			if len(person) != 0:
+				ifFound = 0
+				for row in range(1,row_count):
+					if counter[row-1] < maxsize: #if we havent accounted for all the potential people in the team. ie if a max team size is 6 if 6 people havent been ticked off
+						rowdata = "|".join(data[row])
+						if person[col] in rowdata:
+							person.append(1)
+							counter[row-1] = counter[row-1]+1
+							ifFound = 1
+							break
+				if ifFound == 0:
+					person.append(0)
 		writer.writerow(person)
