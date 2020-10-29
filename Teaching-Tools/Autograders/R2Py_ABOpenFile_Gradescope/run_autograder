@@ -1,0 +1,8 @@
+#! /bin/bash
+
+cd /autograder/source
+cp /autograder/submission/reference_monitor_*.r2py ./assignment #gets all items that follow this naming convention
+cd assignment
+
+chmod +x reference_monitor_*.r2py
+python run_tests.py > /autograder/results/results.json
