@@ -4,10 +4,13 @@ import argparse
 import csv
 
 from collections import Counter
+from operator import itemgetter # apparently faster than the lambda function lambda x: x[1]
 import heapq
 import numpy as np 
 
 from multiprocessing import Process
+
+def binSearch(data, keyindex, start, end)
 
 def knn(k, training, test, ifLabel=False):
 	if k > len(training):
@@ -24,7 +27,8 @@ def knn(k, training, test, ifLabel=False):
 			minDist = []
 
 			test[i] = list(map(float, test[i]))
-			[push(minDist, (-euclideanDistance( abs(subtract(test[i], list(map(float,training[j][1:]))  ))),training[j][0] ) ) for j in range(k)] # gets the first k values
+
+			[push(minDist, (-euclideanDistance( abs(subtract(test[i], training[j][1:]  ))),training[j][0] ) ) for j in range(k)] 
 
 			for j in range(k, len(training)):
 
@@ -42,13 +46,13 @@ def knn(k, training, test, ifLabel=False):
 			print (Counter(labels).most_common(1)[0][0], test[i])
 
 	else:
+		'''
 		for i in range(len(test)):
 			minDist = []
 			test[i] = list(map(float, test[i]))
-			training[i] = list(map(float, training[i]))
 
-			[push(minDist, (euclideanDistance(abs(subtract(test[i], list(map(float,training[j]))  ))), training[j]) ) for j in range(k)] # gets the first k values
-
+			# [push(minDist, (euclideanDistance(abs(subtract(test[i], list(map(float,training[j]))  ))), training[j]) ) for j in range(k)] # gets the first k values
+			[push(minDist, (euclideanDistance(abs(subtract(test[i], training[j]  ))), training[j]) ) for j in range(k)] 
 			for j in range(k, len(training)):
 
 				# check if need to calculate euclid
@@ -63,6 +67,7 @@ def knn(k, training, test, ifLabel=False):
 
 			labels = [item[1] for item in minDist]
 			print (test[i],":",[item[1] for item in minDist])
+		'''
 
 def parallelknn(k, training, test, threadcount, ifLabel=False):
 	# np.subtract(arr1,arr2)
@@ -82,6 +87,15 @@ def parallelknn(k, training, test, threadcount, ifLabel=False):
 		start = end
 		end = (start + inc) if ((end + inc) < numtestrows) else numtestrows
 
+def rowToFloat(row, ifLabel = False):
+	data = []
+	if ifLabel:
+		data = list(map(float,row[1:]))
+		data.insert(0,row[0])
+	else:
+		data = list(map(float,row))
+
+	return data
 
 def main():
 	parser = argparse.ArgumentParser()
@@ -97,7 +111,10 @@ def main():
 	
 	with open(trainingfile, "r") as datafile:
 		reader = csv.reader(datafile)
-		trainingdata = list(reader)
+		# trainingdata = list(reader)
+
+		trainingdata = sorted([rowToFloat(row, args.ifLabel) for row in reader],key=itemgetter(1))
+		trainingdata = [rowToFloat(row, args.ifLabel) for row in reader]
 
 	with open(testfile, "r") as datafile:
 		reader = csv.reader(datafile)

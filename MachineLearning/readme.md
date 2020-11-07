@@ -25,6 +25,14 @@ We can do this by using a max heap that only has k slots representing the curren
 
 We start off with k values in the heap and as we find items smaller than the max item we pop out the largest of the k values and push in the new value
 
+We can further optimize this by sorting the training data first on one of the features. The best is a diverse feature, but as long as all the values has some variance it doesnt matter-- the easiest to handle, of course is the first feature. When we sort it, after every update of the kth nearest neighbor, we can easily eliminate at least all items where differences between the first feature is greater than the kth nearest distance because they will be clustered together. We can combine this with binary search until we get "in range" 
+
+Let's say calculating the difference between 2 vectors takes *f* time where *f* is equal to the number of features
+Euclidean distance takes 2*f* (diff and square) + 1 (sqrt) \~ 2*f*
+Normally before reducing the training data we would have to do 2*f*nm \~O(*f*nm) time
+The sorting takes nlogn time. 
+Binary search takes at most nlog(n) time. 
+
 ----------------
 
 To make this faster, we use parallel computing split up all the items we need to classify into separate processes.
