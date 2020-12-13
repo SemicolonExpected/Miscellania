@@ -4,7 +4,7 @@ Loads CSV data into a mySQL database. It assumes the first row values are column
 Has option for python 2 and 3, just comment out `pymysql` and uncomment out `mysqldb` for python2 for both the import and connector lines.
 Unfortunately the create table value creates a table where all the columns are just `varchar(255)` right now. Would be good if we could somehow easily write a script to create varied tables
 
-    loadCSVintoDatabase.py -c <filename> <tablename>
+    python3 loadCSVintoDatabase.py -c <filename> <tablename>
 
 This script is deprecated since `LOAD DATA INFILE` is a lot faster.
 
@@ -14,7 +14,7 @@ Parallel Loader to load CSV data into a mySQL database.
 Tablename here defaults to the csv name. 
 
 
-    ploadCSVintoDatabase.py [-field][-partitions][--create-table] [--header-included] <filename> <threadcount>
+    python3 ploadCSVintoDatabase.py [-field][-partitions][--create-table] [--header-included] <filename> <threadcount>
 
     <filename> is the csv file you want to load into the database
 

@@ -10,7 +10,22 @@ import numpy as np
 
 from multiprocessing import Process
 
-def binSearch(data, keyindex, start, end)
+def binSearch(lowerbound, upperbound, data, start, end, keyindex = None):
+
+	mid = round((start+end)/2)
+
+	if keyindex is not None:
+		item = data[mid][keyindex]
+	else:
+		item = data[mid]
+
+	while not (lowerbound <= item <= upperbound):
+		if(lowerbound > item):
+			mid = binSearch(lowerbound, upperbound, data, start, mid-1, keyindex)
+		if(item > upperbound):
+			mid = binSearch(lowerbound, upperbound, data, mid, end, keyindex)
+
+	return mid
 
 def knn(k, training, test, ifLabel=False):
 	if k > len(training):
@@ -21,15 +36,54 @@ def knn(k, training, test, ifLabel=False):
 	subtract = np.subtract
 	push = heapq.heappush
 	pop = heapq.heappop
-	getMax = heapq.nsmallest
+	getMax = heapq.nsmallest #because heapq is a minheap, we need to flip all the signs
 	if ifLabel:
 		for i in range(len(test)):
-			minDist = []
+
+			minDist = [] #the k smallest distances
 
 			test[i] = list(map(float, test[i]))
 
+			#push the first 7 distances in
 			[push(minDist, (-euclideanDistance( abs(subtract(test[i], training[j][1:]  ))),training[j][0] ) ) for j in range(k)] 
 
+			#values for binary search
+			start = 7
+			end = len(training)-1
+			lowerbound = test[i][0] + getMax(1,minDist)[0][0]
+			upperbound = test[i][0] - getMax(1,minDist)[0][0]
+
+			p = binSearch(lowerbound, upperbound, training, start, end, 1)
+
+			for j in range(p, len(training)):
+				if(training[j][1] > upperbound):
+					break
+
+				diff = -abs(subtract(test[i], list(map(float,training[j][1:]))))
+				if all( diff > getMax(1,minDist)[0][0] ) :
+					#print(diff, getMax(1,minDist)[0][0], test[i], training[j])
+					dist = -euclideanDistance(diff) 
+					if dist > getMax(1,minDist)[0][0]:
+						pop(minDist)
+						push(minDist, (dist, training[j][0])) 
+						upperbound = test[i][0] - getMax(1,minDist)[0][0]
+
+
+			for j in range(p, 0, -1):
+				if(training[j][1] > upperbound):
+					break
+				
+				diff = -abs(subtract(test[i], list(map(float,training[j][1:]))))
+				if all( diff > getMax(1,minDist)[0][0] ) :
+					#print(diff, getMax(1,minDist)[0][0], test[i], training[j])
+					dist = -euclideanDistance(diff) 
+					if dist > getMax(1,minDist)[0][0]:
+						pop(minDist)
+						push(minDist, (dist, training[j][0])) 
+						lowerbound = test[i][0] + getMax(1,minDist)[0][0]
+
+
+			'''
 			for j in range(k, len(training)):
 
 				# check if need to calculate euclid
@@ -41,11 +95,13 @@ def knn(k, training, test, ifLabel=False):
 					if dist > getMax(1,minDist)[0][0]:
 						pop(minDist)
 						push(minDist, (dist, training[j][0])) 
+			'''
 
 			labels = [item[1] for item in minDist]
 			print (Counter(labels).most_common(1)[0][0], test[i])
 
 	else:
+		pass
 		'''
 		for i in range(len(test)):
 			minDist = []
@@ -114,9 +170,9 @@ def main():
 		# trainingdata = list(reader)
 
 		trainingdata = sorted([rowToFloat(row, args.ifLabel) for row in reader],key=itemgetter(1))
-		trainingdata = [rowToFloat(row, args.ifLabel) for row in reader]
+		#trainingdata = [rowToFloat(row, args.ifLabel) for row in reader]
 
-	with open(testfile, "r") as datafile:
+	with open(testfile, "r") as datafile: #we dont floatify this because we only need to do this once and its better to do this in parallel when its needed
 		reader = csv.reader(datafile)
 		testdata = list(reader)
 	
