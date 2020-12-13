@@ -3,3 +3,4 @@ pycodestyle:  # Same as scanner.linter value. Other option is flake8
     ignore:
       - W191  # Indents
       - E265  # Block comment should start with '# '
+      - E265  # Block comment should start with '# '
