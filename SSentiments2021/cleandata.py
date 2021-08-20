@@ -61,7 +61,7 @@ data.drop(['DataQuality','Status','DistributionChannel','UserLanguage', 'Referer
 data.drop([c for c in data.columns if c.startswith('Q_') or c.startswith('Email') or c.startswith('Consent') or ("Date" in c)],inplace = True, axis = 1)
 
 data = data.rename(columns={"Demo 3": "degreePersuing", "Demo 4": "yearInProgram", "Demo 5": "University", "Demo 6": "Age", "Demo 7_1_TEXT": "Referer",
-                            "Z1": "ifLMSUsed", "L1": "ifLMSUsed", "E2": "ifProctorUsed",
+                            "Z1": "ifZoomUsed", "L1": "ifLMSUsed", "E2": "ifProctorUsed",
                             "Z2": "VidConSoftwareUsed", "L2":"LMSUsed", "E3":"ProctorUsed", 
                             "Z3_1":"ifMandatoryCamera", "Z3_2": "ifLecturesRecorded",
                             "Z6":"beliefsVidCon", "Z7":"beliefsDataSentVidCon", 
