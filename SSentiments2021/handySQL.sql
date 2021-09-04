@@ -1,3 +1,47 @@
+#select number of partial responses
+
+
+#get a matrix of demographics to responses
+
+#age vs responses
+
+#undergrad vs gradschool vs responses
+
+
+#get count of degrees persuing
+SELECT degreePersuing, count(degreePersuing)
+from data
+GROUP BY degreePersuing;
+
+#get count of degree/year in degree
+SELECT degreePersuing, yearInProgram, count(yearInProgram)
+from data
+GROUP BY degreePersuing, yearInProgram;
+
+#count of people who used each software and people who didnt
+SELECT ifZoomUsed, COUNT(ifZoomUsed) as countUsed
+FROM data
+GROUP BY ifZoomUsed;
+
+SELECT ifLMSUsed, COUNT(ifLMSUsed) as countUsed
+FROM data
+GROUP BY ifLMSUsed;
+
+# get software used
+SELECT VidConSoftwareUsed, count(VidConSoftwareUsed)
+FROM data
+Group BY VidConSoftwareUsed;
+
+SELECT LMSUsed, count(LMSUsed)
+FROM data
+WHERE ifLMSUsed = 'Yes'
+Group BY LMSUsed;
+
+SELECT ProctorUsed, count(ProctorUsed)
+FROM data
+WHERE ifProctorUsed = 'I have used a proctoring software'
+Group BY ProctorUsed;
+
 # of people who had mandatory camera given their desire for recording
 # P(mandatoryCamera|recordingdesire)
 
@@ -13,6 +57,7 @@ FROM data, (SELECT ifMandatoryCamera, COUNT(ifMandatoryCamera) as c FROM data GR
 WHERE data.ifMandatoryCamera = d.ifMandatoryCamera
 GROUP BY data.ifMandatoryCamera, ifWantRecording;
 
+# of people who answered a certain way in a proctoring likert given whether they have used/heard of a proctor
 SELECT data.ifProctorUsed, ifComfortableProctor, c, COUNT(data.ifComfortableProctor) as countDistinct, CAST(COUNT(data.ifComfortableProctor) as float)/c*100 as percentage
 FROM data, (SELECT ifProctorUsed, COUNT(ifProctorUsed) as c FROM data GROUP BY ifProctorUsed) as d
 WHERE data.ifProctorUsed = d.ifProctorUsed
@@ -27,3 +72,8 @@ SELECT data.ifProctorUsed, ifBelieveFairProctor, c, COUNT(data.ifBelieveFairProc
 FROM data, (SELECT ifProctorUsed, COUNT(ifProctorUsed) as c FROM data GROUP BY ifProctorUsed) as d
 WHERE data.ifProctorUsed = d.ifProctorUsed
 GROUP BY data.ifProctorUsed, ifBelieveFairProctor;
+
+SELECT data.ifProctorUsed, ifBelieveEffectiveProctor, c, COUNT(data.ifBelieveEffectiveProctor) as countDistinct, CAST(COUNT(data.ifBelieveEffectiveProctor) as float)/c*100 as percentage
+FROM data, (SELECT ifProctorUsed, COUNT(ifProctorUsed) as c FROM data GROUP BY ifProctorUsed) as d
+WHERE data.ifProctorUsed = d.ifProctorUsed
+GROUP BY data.ifProctorUsed, ifBelieveEffectiveProctor;

@@ -54,6 +54,7 @@ data['Z6'] = data['Z6'].str.replace('Other', '') + data['Z6_17_TEXT'].fillna('')
 data['L3'] = data['L3'].str.replace('Other', '') + data['L3_17_TEXT'].fillna('').map(str)
 data['E7'] = data['E7'].str.replace('Other', '') + data['E7_17_TEXT'].fillna('').map(str)
 
+data = data.rename(columns={"Q_SocialSource": "SocialSource"})
 #Drop the rest of the unessicary fields
 data.drop(['DataQuality','Status','DistributionChannel','UserLanguage', 'Referer', 'RecipientAvgTimeToRespond',
            'Demo 1', 'Demo 2', 'Demo 7_2_TEXT','Demo 7_3_TEXT',
