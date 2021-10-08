@@ -11,5 +11,5 @@ h_ad_id and gc_id is [HYROS](https://docs.hyros.com/how-to-connect-your-google-a
 
 [utm](https://ga-dev-tools.web.app/ga4/campaign-url-builder/) stuff is adsense campaign related stuff
 
-    utm_term is paid keywords
+ - utm_term is paid keywords
 
