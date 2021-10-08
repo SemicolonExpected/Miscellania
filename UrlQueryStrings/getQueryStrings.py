@@ -14,7 +14,7 @@ def splitUrls(urls, ifFilter = False, ifEmptyStrings = True):
     domains = {}
     ignorerefs = []
     if ifFilter is True:
-        ignorerefs = ['gclid', 'gclsrc']
+        ignorerefs = ['dclid','gclid', 'gclsrc']
     for i in range(len(urls)):
         urlpair = urls[i].split('?')
         #split the querystring
