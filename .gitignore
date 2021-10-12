@@ -2,3 +2,8 @@
 Barcode-Tools/output.csv
 SSentiments2021/sqlresults.csv
 SSentiments2021/sentiments.db
+UrlQueryStrings/rawurls.csv
+UrlQueryStrings/spliturls_noempty.json
+UrlQueryStrings/spliturls.json
+UrlQueryStrings/rawurls.txt
+UrlQueryStrings/ads and urls.csv
