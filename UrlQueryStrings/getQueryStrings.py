@@ -5,10 +5,9 @@ Created on Thu Oct  7 23:46:34 2021
 @author: SemicolonExpected
 """
 
-import argparse
+
 import pandas as pd
-import sys
-import json
+from urllib.parse import urlparse
 
 def splitUrls(urls, ifFilter = False, ifEmptyStrings = True):
     domains = {}
@@ -49,34 +48,24 @@ def aggregateReferers(urldict):
             for key in agg:
                 agg[key] = list(set(agg[key]))
             urldict[url] = agg
+        if len(urldict[url]) == 1:
+            if isinstance(urldict[url], list):
+                urldict[url] = urldict[url][0]
+        if len(urldict[url]) == 0:
+            urldict[url] = {}
 
-parser = argparse.ArgumentParser(description='Gets the Query Strings from list of urls')
-parser.add_argument('--filter', dest = 'iffilter', action='store_true')
-parser.add_argument('--noheader', dest = 'ifheader', action='store_false')
-parser.add_argument('ifile', type=argparse.FileType('r'), help='input list of urls in txt file without header')
-
-args = parser.parse_args()
-
-infile = args.ifile.name
-
-try:
-    file = open(infile, 'r')
-    urls = file.readlines()
-except:
-    print('Input file not supported')
-    sys.exit(1)
-    
-domains = splitUrls(urls, args.iffilter)
-domainsNoEmpty = splitUrls(urls, args.iffilter, False)
-
-aggregateReferers(domains)
-
-#print(len(list(domains.keys())))
-
-out_file = open("spliturlsAggregated.json", "w")
-json.dump(domains, out_file, indent = 4)
-out_file.close()
-
+def aggregateDomains(urldict):
+    aggurldict = {}
+    for url in urldict:
+        host = urlparse(url).scheme+"://"+urlparse(url).netloc
+        if host in aggurldict:
+            #add new entry
+            aggurldict[host]["links"][url] = urldict[url]
+        else:
+            aggurldict[host] = {"links":{url: urldict[url]}}
+        
+    return aggurldict
+        
 '''
 # uncomment out to print to json
 
