@@ -12,7 +12,6 @@ UrlQueryStrings/Some writing
 UrlQueryStrings/urls.txt
 SSentiments2021/.ipynb_checkpoints/DataBeliefsVsPreferences-checkpoint.ipynb
 SSentiments2021/.ipynb_checkpoints/SurveyStatistics-checkpoint.ipynb
-*.csv
 SSentiments2021/data.db
 UrlQueryStrings/lookat.json
 UrlQueryStrings/lookat1.json
