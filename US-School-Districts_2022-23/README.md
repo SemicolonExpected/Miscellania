@@ -1,7 +1,7 @@
 # US School Districts
 
 
-##Info
+## Info
 
 List of all school districts was taken from the [NCES database](https://nces.ed.gov/ccd/) A direct link to the data file is [here](https://nces.ed.gov/ccd/data/zip/ccd_lea_029_2223_w_1a_083023.zip).
 
